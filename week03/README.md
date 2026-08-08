@@ -126,13 +126,13 @@ export async function POST(request) {
 
 ## 3. HTTP Status Code 완성
 
-제공된 `route.js`에서는 HTTP status code가 모두 임시 값인 `999`로 작성되어 있습니다.
+제공된 `route.js`에서는 HTTP status code가 모두 임시 값인 `200`로 작성되어 있습니다.
 
 ```js
-{ status: 999 }
+{ status: 200 }
 ```
 
-각 상황을 확인하고 `999`를 적절한 HTTP status code로 수정합니다.
+각 상황을 확인하고 `200`를 적절한 HTTP status code로 수정합니다.
 
 이번 실습에서는 다음 세 가지 status code만 사용합니다.
 
@@ -153,12 +153,12 @@ if (!originalUrl) {
         message: "Original URL is required.",
       },
     },
-    { status: 999 } // TODO
+    { status: 200 } // TODO
   );
 }
 ```
 
-`route.js`에 있는 모든 `status: 999`를 찾아 상황에 맞게 수정합니다.
+`route.js`에 있는 모든 `status: 200`를 찾아 상황에 맞게 수정합니다.
 
 ---
 
