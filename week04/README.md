@@ -125,7 +125,7 @@ export async function saveUrl(shortCode, originalUrl) {
 상단에 다음 import를 추가합니다.
 
 ```js
-import { saveUrl } from "@/lib/db";
+import { saveUrl } from "../../../lib/db";
 ```
 
 `shortCode`를 생성한 다음 DB에 저장합니다.
