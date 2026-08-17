@@ -1,4 +1,4 @@
-import { findUrlByShortCode } from "@/lib/db";
+import { findUrlByShortCode } from "../../lib/db";
 
 export async function GET(request, { params }) {
   const { shortCode } = await params;
