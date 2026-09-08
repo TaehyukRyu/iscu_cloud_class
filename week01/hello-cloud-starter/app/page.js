@@ -13,7 +13,7 @@ function validateUrl(value) {
   }
   // TODO 2: 최대 길이 검증
   if (trimmedUrl.length > MAX_URL_LENGTH) {
-    return 'URL은 ${MAX_URL_LENGTH}자 이하로 입력해 주세요.';
+    return "URL은 2048자 이하로 입력해 주세요.";
   }
   // TODO 3: http:// 또는 https:// 시작 여부 검증
   if (!trimmedUrl.startsWith("http://")&&
@@ -30,6 +30,9 @@ function validateUrl(value) {
     return "올바른 URL 형식으로 입력해 주세요.";
   }
 
+  if (!parseUrl.hostname.includes(".")) {
+    return "올바른 URL 형식으로 입력해 주세요.";
+  }
 
   return null;
 }
