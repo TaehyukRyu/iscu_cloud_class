@@ -2,6 +2,7 @@ import { neon } from "@neondatabase/serverless";
 
 const sql = neon(process.env.DATABASE_URL);
 
+
 // Redirect가 성공하기 전에 클릭 사용량을 기록합니다.
 export async function recordClick(shortCode) {
   await sql`
@@ -12,6 +13,7 @@ export async function recordClick(shortCode) {
     WHERE short_code = ${shortCode}
   `;
 }
+
 
 // 전체 URL 수, 전체 클릭 수, 한 번 이상 클릭된 URL 수를 집계합니다.
 export async function getSummaryStats() {
@@ -31,6 +33,7 @@ export async function getSummaryStats() {
     clickedUrls: Number(row.clicked_urls),
   };
 }
+
 
 // 한 번 이상 클릭된 URL 가운데 클릭 수가 가장 많은 URL을 찾습니다.
 export async function getTopUrl() {
@@ -57,6 +60,7 @@ export async function getTopUrl() {
     clickCount: Number(row.click_count),
   };
 }
+
 
 // 관리자 화면에 표시할 URL별 사용량 정보를 가져옵니다.
 export async function getUrlStats() {
