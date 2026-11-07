@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { NextResponse } from "next/server";
-import { saveUrl } from "../../../lib/db";
+import { findShortCodeByUrl, saveUrl } from "../../../lib/db";
 
 
 export const runtime = "nodejs";
@@ -159,6 +159,50 @@ export async function POST(request) {
 
 
     /*
+     * 5-1. 자기 서비스 주소 차단
+     *
+     * 이 서비스 자신의 주소를 다시 단축하면
+     * 단축 URL이 자기 자신을 가리키게 되므로 거부합니다.
+     * http/https, 경로와 상관없이 호스트(도메인)만 비교합니다.
+     */
+    const serviceHost = new URL(request.url).hostname;
+
+    if (parsedUrl.hostname === serviceHost) {
+      return NextResponse.json(
+        {
+          error: {
+            code: "SELF_URL_NOT_ALLOWED",
+            message: "This service's own URL cannot be shortened.",
+          },
+        },
+        { status: 400 }
+      );
+    }
+
+
+    /*
+     * 5-2. 이미 단축한 URL인지 확인 (중복 처리)
+     *
+     * 같은 originalUrl이 DB에 있으면 새로 저장하지 않고
+     * 기존 shortCode를 200(새로 만든 것 아님)으로 반환합니다.
+     */
+    const baseUrl = new URL(request.url).origin;
+
+    const existingCode = await findShortCodeByUrl(originalUrl);
+
+    if (existingCode) {
+      return NextResponse.json(
+        {
+          shortCode: existingCode,
+          shortUrl: `${baseUrl}/${existingCode}`,
+          originalUrl,
+        },
+        { status: 200 }
+      );
+    }
+
+
+    /*
      * 6. Short URL 생성
      *
      * 모든 검사를 통과했으므로
@@ -167,8 +211,6 @@ export async function POST(request) {
     const shortCode = createShortCode(originalUrl);
 
     await saveUrl(shortCode, originalUrl);
-
-    const baseUrl = new URL(request.url).origin;
 
 
     /*
